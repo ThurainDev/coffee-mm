@@ -12,10 +12,10 @@ const HeroSection = () => (
       {/* Left: Text Content */}
       <div className="w-full md:w-1/2 text-center md:text-left flex flex-col items-center md:items-start">
         <h1 className="text-2xl sm:text-4xl md:text-3xl mb-4 font-display text-white">
-          သင်ဟာ ကော်ဖီကြိုက်တတ်သူတစ်ယောက်လား ?
+          သင်က ကော်ဖီကိုနှစ်သက်တဲ့သူတစ်ယောက်လား ?
         </h1>
         <p className="mb-6 md:mb-8 text-base sm:text-lg opacity-80 max-w-md text-white">
-           ဒီ website မှာကော်ဖီနဲ့ပတ်သက်တဲ့အကြောင်းရာတွေကို ဖတ်ရှုလေ့လာလို့ရပါတယ် 
+           ဒါဆိုရင်ကော်ဖီနဲ့ပတ်သက်တဲ့အကြောင်းရာတွေကို ဒီ Website မှာဖတ်ရှုလေ့လာလို့ရပါတယ် 
         </p>
         <div className="space-x-0 space-y-3 md:space-x-4 md:space-y-0 flex flex-col md:flex-row w-full md:w-auto items-center">
           <button className="w-full md:w-auto bg-button hover:bg-accent text-white font-semibold py-2 px-6 rounded transition-colors">Read Blogs</button>
