@@ -1,12 +1,76 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import timeline from '../helpers/timelineData';
 
 const FeaturedPosts = () => {
+  const sectionRef = useRef(null);
+  const titleRef = useRef(null);
+  const timelineRefs = useRef([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Animate title
+            if (titleRef.current) {
+              titleRef.current.style.opacity = '1';
+              titleRef.current.style.transform = 'translateY(0)';
+            }
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    // Create individual observers for each timeline item
+    const timelineObservers = timelineRefs.current.map((ref, index) => {
+      if (!ref) return null;
+      
+      const itemObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              // Add a slight delay based on index for staggered effect
+              setTimeout(() => {
+                if (ref) {
+                  ref.style.opacity = '1';
+                  ref.style.transform = 'translateY(0) scale(1)';
+                }
+              }, index * 100); // 100ms delay between each item
+            }
+          });
+        },
+        { threshold: 0.3, rootMargin: '0px 0px -50px 0px' }
+      );
+      
+      itemObserver.observe(ref);
+      return itemObserver;
+    });
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+      timelineObservers.forEach(obs => obs?.disconnect());
+    };
+  }, []);
+
   return (
-    <section id="history" className="py-16 relative" style={{ background: 'var(--color-background)' }}>
+    <section 
+      id="history" 
+      ref={sectionRef}
+      className="py-16 relative" 
+      style={{ background: 'var(--color-background)' }}
+    >
       <div className="absolute inset-0 pointer-events-none" style={{background: 'linear-gradient(135deg, rgba(123,63,0,0.08) 0%, rgba(217,160,102,0.08) 100%)'}}></div>
       <div className="relative max-w-4xl mx-auto px-4">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-12 font-display text-center" style={{ color: 'var(--color-text)' }}>
+        <h2 
+          ref={titleRef}
+          className="text-3xl sm:text-4xl font-bold mb-12 font-display text-center opacity-0 transform translate-y-8 transition-all duration-700 ease-out" 
+          style={{ color: 'var(--color-text)' }}
+        >
           ကော်ဖီ၏ သမိုင်းကြောင်း
         </h2>
         <div className="relative">
@@ -16,7 +80,12 @@ const FeaturedPosts = () => {
             {timeline.map((item, idx) => {
               const isLeft = idx % 2 === 0;
               return (
-                <div key={item.title} className={`relative flex flex-col sm:flex-row items-center ${isLeft ? 'sm:flex-row' : 'sm:flex-row-reverse'}`} style={{ zIndex: 1 }}>
+                <div 
+                  key={item.title} 
+                  ref={(el) => (timelineRefs.current[idx] = el)}
+                  className={`relative flex flex-col sm:flex-row items-center ${isLeft ? 'sm:flex-row' : 'sm:flex-row-reverse'} opacity-0 transform translate-y-8 scale-95 transition-all duration-700 ease-out`} 
+                  style={{ zIndex: 1 }}
+                >
                   {/* Image */}
                   <div className="flex-shrink-0 w-28 h-28 rounded-2xl overflow-hidden shadow-lg border-4 border-accent bg-background z-10">
                     <img src={item.image} alt={item.title} className="w-full h-full object-cover" />

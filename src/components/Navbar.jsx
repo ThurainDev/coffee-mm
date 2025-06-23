@@ -28,9 +28,16 @@ export default function Navbar() {
     setTimeout(() => {
       const element = document.getElementById(sectionId);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+        // Add offset to account for sticky navbar
+        const navbarHeight = 64; // 16 * 4 = 64px (h-16)
+        const elementPosition = element.offsetTop - navbarHeight;
+        
+        window.scrollTo({
+          top: elementPosition,
+          behavior: 'smooth'
+        });
       }
-    }, 100);
+    }, 150);
   };
 
   const navLinks = [
@@ -57,14 +64,14 @@ export default function Navbar() {
               <button
                 key={link.name}
                 onClick={() => handleNavigation(link.sectionId)}
-                className="text-[color:var(--color-text)] hover:text-accent font-medium tracking-wider transition-colors"
+                className="text-[color:var(--color-text)] hover:text-accent font-medium tracking-wider transition-all duration-300 hover:scale-105"
               >
                 {link.name}
               </button>
             ))}
             <button
               onClick={() => setDark(!dark)}
-              className="text-[color:var(--color-text)] hover:text-accent"
+              className="text-[color:var(--color-text)] hover:text-accent transition-all duration-300 hover:scale-110"
               aria-label="Toggle theme"
             >
               {dark ? '🌙' : '☀️'}
@@ -75,7 +82,7 @@ export default function Navbar() {
           <div className='md:hidden flex items-center'>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className='text-[color:var(--color-text)] hover:text-accent transition-colors'
+              className='text-[color:var(--color-text)] hover:text-accent transition-all duration-300 hover:scale-110'
               aria-label='Toggle menu'
             >
               {menuOpen ? (
@@ -92,7 +99,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile menu with smooth animation */}
-        <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+        <div className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${
           menuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}>
           <div className='py-4 border-t border-accent'>
@@ -101,7 +108,7 @@ export default function Navbar() {
                 <button
                   key={link.name}
                   onClick={() => handleNavigation(link.sectionId)}
-                  className="text-[color:var(--color-text)] hover:text-accent font-medium px-2 text-left transition-colors duration-200"
+                  className="text-[color:var(--color-text)] hover:text-accent font-medium px-2 text-left transition-all duration-300 hover:translate-x-2"
                 >
                   {link.name}
                 </button>
@@ -111,7 +118,7 @@ export default function Navbar() {
                   setDark(!dark);
                   setMenuOpen(false);
                 }}
-                className="text-[color:var(--color-text)] hover:text-accent text-left px-2 transition-colors duration-200"
+                className="text-[color:var(--color-text)] hover:text-accent text-left px-2 transition-all duration-300 hover:translate-x-2"
                 aria-label="Toggle theme"
               >
                 {dark ? '🌙 Dark Mode' : '☀️ Light Mode'}
