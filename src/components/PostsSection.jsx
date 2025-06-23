@@ -57,22 +57,22 @@ const LatestPosts = () => {
                     <article 
                       className="group bg-white dark:bg-[#1A1A1A] rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row hover:shadow-xl transition-all"
                     >
-                      <div className="md:w-1/3">
+                      <div className="md:w-2/5">
                         <img 
                           src={post.image} 
                           alt={post.title}
-                          className="w-full h-48 md:h-42 object-cover transition-transform group-hover:scale-105"
+                          className="w-full h-48 md:h-48 object-cover transition-transform group-hover:scale-105"
                         />
                       </div>
-                      <div className="md:w-2/3 p-6">
-                        <div className="flex justify-between items-center mb-2">
+                      <div className="md:w-3/5 p-6">
+                        <div className="flex justify-between items-center mb-3">
                           <span className="text-sm font-semibold text-accent group-hover:text-button transition-colors">{post.category}</span>
                           <span className="text-sm opacity-75" style={{ color: 'var(--color-text)' }}>{post.date}</span>
                         </div>
-                        <h3 className="font-bold mb-2 text-xl" style={{ color: 'var(--color-text)' }}>
+                        <h3 className="font-bold mb-3 text-xl" style={{ color: 'var(--color-text)' }}>
                           {post.title}
                         </h3>
-                        <p className="text-sm mb-4 opacity-75" style={{ color: 'var(--color-text)' }}>
+                        <p className="text-sm mb-4 opacity-75 leading-relaxed" style={{ color: 'var(--color-text)' }}>
                           {post.excerpt}
                         </p>
                         <span className="text-accent hover:text-button font-semibold transition-colors cursor-pointer">

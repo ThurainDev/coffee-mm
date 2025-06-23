@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
-import FeaturedPosts from './components/FeaturedPosts';
+import FeaturedPosts from './components/History';
 import LatestPosts from './components/PostsSection';
 import { Outlet, useLocation } from 'react-router-dom';
 

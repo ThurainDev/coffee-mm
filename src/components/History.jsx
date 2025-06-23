@@ -3,7 +3,7 @@ import timeline from '../helpers/timelineData';
 
 const FeaturedPosts = () => {
   return (
-    <section className="py-16 relative" style={{ background: 'var(--color-background)' }}>
+    <section id="history" className="py-16 relative" style={{ background: 'var(--color-background)' }}>
       <div className="absolute inset-0 pointer-events-none" style={{background: 'linear-gradient(135deg, rgba(123,63,0,0.08) 0%, rgba(217,160,102,0.08) 100%)'}}></div>
       <div className="relative max-w-4xl mx-auto px-4">
         <h2 className="text-3xl sm:text-4xl font-bold mb-12 font-display text-center" style={{ color: 'var(--color-text)' }}>

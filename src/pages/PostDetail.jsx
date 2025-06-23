@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import posts from '../helpers/postsData';
 
@@ -13,6 +13,11 @@ const PostDetail = () => {
   const navigate = useNavigate();
   const post = posts.find(p => p.id === Number(id));
   const otherPosts = getRandomPosts(id);
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [id]);
 
   if (!post) return <div className="text-center py-20">Post not found.</div>;
 
