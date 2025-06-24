@@ -19,7 +19,7 @@ const ContactSection = () => {
   }, []);
 
   return (
-    <section className="flex justify-center items-center py-2 px-2 bg-transparent">
+    <section id="contact" className="flex justify-center items-center py-2 px-2 bg-transparent">
       <div
         ref={cardRef}
         className={`bg-white dark:bg-[#181818] rounded-2xl max-w-5xl w-full flex flex-col md:flex-row items-center justify-between overflow-hidden border-t-1 border-accent shadow-[0_-2px_16px_0_rgba(0,0,0,0.08)] px-8 md:px-12 transition-all duration-700 ease-out
