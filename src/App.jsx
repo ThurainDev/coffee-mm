@@ -5,6 +5,7 @@ import FeaturedPosts from './components/History';
 import LatestPosts from './components/PostsSection';
 import Footer from './components/Footer';
 import { Outlet, useLocation } from 'react-router-dom';
+import ContactSection from './components/ContactSection';
 
 function App() {
   const location = useLocation();
@@ -17,6 +18,7 @@ function App() {
       {isHome && <FeaturedPosts />}
       {isHome && <LatestPosts />}
       <Outlet />
+      <ContactSection/>
       <Footer />
     </div>
   );

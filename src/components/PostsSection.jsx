@@ -99,7 +99,7 @@ const LatestPosts = () => {
     <section 
       id="latest-posts-section" 
       ref={sectionRef}
-      className="py-16" 
+      className="py-10" 
       style={{ background: 'var(--color-background)' }}
     >
       <div className="max-w-6xl mx-auto px-4">
