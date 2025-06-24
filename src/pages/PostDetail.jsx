@@ -23,16 +23,14 @@ const PostDetail = () => {
 
   const handleBack = () => {
     navigate('/');
-    // Scroll to posts section after navigation
     setTimeout(() => {
-      const postsSection = document.getElementById('latest-posts-section');
-      if (postsSection) {
-        postsSection.scrollIntoView({ 
-          behavior: 'smooth',
-          block: 'start'
-        });
+      const section = document.getElementById('latest-posts-section');
+      if (section) {
+        const yOffset = -80; // Adjust this value to match your navbar height
+        const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
       }
-    }, 100); // Small delay to ensure navigation completes
+    }, 100); // Delay to ensure navigation completes and DOM is ready
   };
 
   return (

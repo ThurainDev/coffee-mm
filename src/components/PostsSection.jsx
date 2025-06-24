@@ -85,13 +85,14 @@ const LatestPosts = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    // Scroll to top of posts section when page changes
     setTimeout(() => {
-      const postsContainer = document.querySelector('#latest-posts-section .md\\:w-3\\/4');
-      if (postsContainer) {
-        postsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const section = document.getElementById('latest-posts-section');
+      if (section) {
+        const yOffset = -80; // Adjust this value to match your navbar height
+        const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
       }
-    }, 100);
+    }, 100); // Delay to ensure posts are rendered
   };
 
   return (

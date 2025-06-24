@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import FeaturedPosts from './components/History';
 import LatestPosts from './components/PostsSection';
+import Footer from './components/Footer';
 import { Outlet, useLocation } from 'react-router-dom';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       {isHome && <FeaturedPosts />}
       {isHome && <LatestPosts />}
       <Outlet />
+      <Footer />
     </div>
   );
 }
