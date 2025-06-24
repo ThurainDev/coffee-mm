@@ -11,6 +11,8 @@ const categories = [
 
 const LatestPosts = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 4;
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const sidebarRef = useRef(null);
@@ -25,6 +27,11 @@ const LatestPosts = () => {
       localStorage.removeItem('selectedCategory');
     }
   }, []);
+
+  // Reset to first page when category changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -65,7 +72,27 @@ const LatestPosts = () => {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [currentPage]); // Re-run when page changes to re-animate
+
+  // Filter posts based on selected category
+  const filteredPosts = posts.filter(post => selectedCategory === 'All' || post.category === selectedCategory);
+  
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+  const startIndex = (currentPage - 1) * postsPerPage;
+  const endIndex = startIndex + postsPerPage;
+  const currentPosts = filteredPosts.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    // Scroll to top of posts section when page changes
+    setTimeout(() => {
+      const postsContainer = document.querySelector('#latest-posts-section .md\\:w-3\\/4');
+      if (postsContainer) {
+        postsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  };
 
   return (
     <section 
@@ -117,45 +144,94 @@ const LatestPosts = () => {
           {/* Main Content */}
           <div className="md:w-3/4">
             <div className="grid gap-8">
-              {posts
-                .filter(post => selectedCategory === 'All' || post.category === selectedCategory)
-                .map((post, index) => (
-                  <Link 
-                    to={`/posts/${post.id}`} 
-                    key={post.id} 
-                    className="block group"
-                    ref={(el) => (postsRefs.current[index] = el)}
-                    style={{ opacity: 0, transform: 'translateY(20px) scale(0.95)', transition: 'all 0.7s ease-out' }}
+              {currentPosts.map((post, index) => (
+                <Link 
+                  to={`/posts/${post.id}`} 
+                  key={post.id} 
+                  className="block group"
+                  ref={(el) => (postsRefs.current[index] = el)}
+                  style={{ opacity: 0, transform: 'translateY(20px) scale(0.95)', transition: 'all 0.7s ease-out' }}
+                >
+                  <article 
+                    className="group bg-white dark:bg-[#1A1A1A] rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row hover:shadow-xl transition-all"
                   >
-                    <article 
-                      className="group bg-white dark:bg-[#1A1A1A] rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row hover:shadow-xl transition-all"
-                    >
-                      <div className="md:w-2/5">
-                        <img 
-                          src={post.image} 
-                          alt={post.title}
-                          className="w-full h-48 md:h-48 object-cover transition-transform group-hover:scale-105"
-                        />
+                    <div className="w-full md:w-60 flex-shrink-0">
+                      <img 
+                        src={post.image} 
+                        alt={post.title}
+                        className="w-full h-40 md:h-40 object-cover rounded-l-lg md:rounded-lg transition-transform group-hover:scale-105"
+                      />
+                    </div>
+                    <div className="md:w-3/4 p-6">
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="text-sm font-semibold text-accent group-hover:text-button transition-colors">{post.category}</span>
+                        <span className="text-sm opacity-75" style={{ color: 'var(--color-text)' }}>{post.date}</span>
                       </div>
-                      <div className="md:w-3/5 p-6">
-                        <div className="flex justify-between items-center mb-3">
-                          <span className="text-sm font-semibold text-accent group-hover:text-button transition-colors">{post.category}</span>
-                          <span className="text-sm opacity-75" style={{ color: 'var(--color-text)' }}>{post.date}</span>
-                        </div>
-                        <h3 className="font-bold mb-3 text-xl" style={{ color: 'var(--color-text)' }}>
-                          {post.title}
-                        </h3>
-                        <p className="text-sm mb-4 opacity-75 leading-relaxed" style={{ color: 'var(--color-text)' }}>
-                          {post.excerpt}
-                        </p>
-                        <span className="text-accent hover:text-button font-semibold transition-colors cursor-pointer">
-                          Read More →
-                        </span>
-                      </div>
-                    </article>
-                  </Link>
-                ))}
+                      <h3 className="font-bold mb-3 text-xl" style={{ color: 'var(--color-text)' }}>
+                        {post.title}
+                      </h3>
+                      <p className="text-sm mb-4 opacity-75 leading-relaxed" style={{ color: 'var(--color-text)' }}>
+                        {post.excerpt}
+                      </p>
+                      <span className="text-accent hover:text-button font-semibold transition-colors cursor-pointer">
+                        Read More →
+                      </span>
+                    </div>
+                  </article>
+                </Link>
+              ))}
             </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex justify-end items-center mt-12 space-x-2">
+                {/* Previous Button */}
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`px-4 py-2 rounded-lg transition-colors ${
+                    currentPage === 1
+                      ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
+                      : 'bg-button hover:bg-accent text-white dark:text-black'
+                  }`}
+                >
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+
+                {/* Page Numbers */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`px-4 py-2 rounded-lg transition-colors ${
+                      currentPage === page
+                        ? 'bg-accent text-white dark:text-black'
+                        : 'bg-white dark:bg-[#1A1A1A] hover:bg-gray-100 dark:hover:bg-gray-800'
+                    }`}
+                    style={{ color: currentPage === page ? undefined : 'var(--color-text)' }}
+                  >
+                    {page}
+                  </button>
+                ))}
+
+                {/* Next Button */}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className={`px-4 py-2 rounded-lg transition-colors ${
+                    currentPage === totalPages
+                      ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
+                      : 'bg-button hover:bg-accent text-white dark:text-black'
+                  }`}
+                >
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

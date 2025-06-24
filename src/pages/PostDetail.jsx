@@ -23,6 +23,16 @@ const PostDetail = () => {
 
   const handleBack = () => {
     navigate('/');
+    // Scroll to posts section after navigation
+    setTimeout(() => {
+      const postsSection = document.getElementById('latest-posts-section');
+      if (postsSection) {
+        postsSection.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    }, 100); // Small delay to ensure navigation completes
   };
 
   return (
